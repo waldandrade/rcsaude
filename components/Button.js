@@ -1,12 +1,15 @@
-import React from 'react';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 
-const Button = ({ onPress, children }) => {
-  return (
-    <TouchableOpacity onPress={onPress} style={styles.button}>
-      <Text style={styles.text}>{ children }</Text>
-    </TouchableOpacity>
-  )
+class Button extends Component {
+  render(){
+    return (
+      <TouchableOpacity onPress={this.props.onPress} style={[styles.button, this.props.bgColor]}>
+        <Text style={styles.text}>{ this.props.children }</Text>
+      </TouchableOpacity>
+    )
+  }
 }
 
 const styles = StyleSheet.create({
@@ -25,4 +28,5 @@ const styles = StyleSheet.create({
   }
 });
 
-export { Button };
+
+export default connect()(Button);

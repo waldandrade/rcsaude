@@ -1,4 +1,4 @@
-import { Platform, StatusBar } from 'react-native';
+import { Platform, StatusBar, StyleSheet } from 'react-native';
 import React, { Component } from 'react';
 
 import { StackNavigator, TabNavigator } from 'react-navigation';
@@ -166,10 +166,7 @@ class ChatScreen extends React.Component {
 }
 
 
-const SimpleApp = StackNavigator({
-    Login: {
-      screen: Login
-    },
+export const SimpleApp = StackNavigator({
     Home: {
       screen: MainScreenNavigator
     },

@@ -19,11 +19,22 @@
     "preset": "jest-expo"
   },
   "dependencies": {
-    "expo": "^24.0.2",
-    "firebase": "^4.6.2",
+    "@shoutem/ui": "^0.23.0",
+    "expo": "^23.0.6",
+    "firebase": "^4.9.0",
+    "moment": "^2.20.1",
     "react": "^16.0.0",
-    "react-native": "^0.51.0",
+    "react-native": "^0.50.4",
+    "react-native-background-timer": "^2.0.0",
     "react-native-branch": "^2.2.4",
-    "react-navigation": "^1.0.0-beta.19"
+    "react-native-device-info": "^0.13.0",
+    "react-native-fcm": "^11.3.0",
+    "react-native-keyboard-aware-scroll-view": "^0.4.2",
+    "react-native-linear-gradient": "^2.4.0",
+    "react-native-vector-icons": "^4.5.0",
+    "react-navigation": "^1.0.0-beta.19",
+    "redux": "^3.7.2",
+    "redux-logger": "^3.0.6",
+    "redux-thunk": "^2.2.0"
   }
 }

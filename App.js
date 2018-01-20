@@ -1,79 +1,52 @@
-import { Platform, StatusBar } from 'react-native';
 import React, { Component } from 'react';
-import { Alert, StyleSheet, Text, View, ListView } from 'react-native';
-import { StackNavigator, TabNavigator } from 'react-navigation';
-import LoginPage from "./components/symbols/LoginPage";
-import { Input } from './components/Input';
-import { Button } from './components/Button';
 
-import * as firebase from 'firebase';
+import { createStore, applyMiddleware } from 'redux';
+import { Provider, connect } from 'react-redux';
+import thunkMiddleware from 'redux-thunk';
+import { createLogger } from 'redux-logger';
 
-//http://firebase.googleblog.com/2016/01/the-beginners-guide-to-react-native-and_84.html
+import LoginUI from "./components/LoginUI";
+import ChatUI from "./components/ChatUI"
+import rootReducer from './reducers';
+import { fetchMessages, checkUserExists } from './actions';
 
-class Login extends Component {
-  render() {
-    return (
-        <LoginPage />
-    );
-  }
-}
+console.ignoredYellowBox = [
+  'Setting a timer'
+];
 
+const loggerMiddleware = createLogger();
 
-export default class App extends React.Component {
+const store = createStore(
+    rootReducer,
+    applyMiddleware(
+        thunkMiddleware,
+        // loggerMiddleware
+    )
+);
 
-  state = {
-    email: '',
-    password: ''
-  }
-
-  componentWillMount() {
-    // Initialize Firebase
-    const firebaseConfig = {
-      apiKey: "AIzaSyA2BI3dac6zOR6aMmeJcVncAGMgrSbbaDo",
-      authDomain: "rccard-5d4ee.firebaseapp.com",
-      databaseURL: "https://rccard-5d4ee.firebaseio.com",
-      projectId: "rccard-5d4ee",
-      storageBucket: "rccard-5d4ee.appspot.com",
-      messagingSenderId: "36838720809"
-    };
-
-    const firebaseApp = firebase.initializeApp(firebaseConfig);
-  }
-
-  render() {
-    return (
-      <View style={styles.root}>
-        <Input
-          placeholder='Enter your email...'
-          label='Email'
-          onChangeText={email => this.setState({ email })}
-          value={this.state.email}
-        />
-        <Input
-          placeholder='Enter your password...'
-          label='password'
-          secureTextEntry
-          onChangeText={password => this.setState({ password })}
-          value={this.state.password}
-        />
-        <Button onPress={() => console.log('Pressed')}>Log In</Button>
-      </View>
-    );
-  }
-}
-
-const styles = StyleSheet.create({
-  root: {
-    backgroundColor: "white",
-    flex: 1,
-    // flexDirection: "column",
-    // alignItems: "center",
-    padding: 20,
-  },
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center'
-  }
+// src/App.js
+const LoginOrChat = connect(
+    (state) => ({
+        authorized: state.user.authorized
+    })
+)(({ authorized, dispatch }) => {
+    if (authorized) {
+        return (<ChatUI />);
+    }else{
+        // dispatch(checkUserExists());
+        return (<LoginUI />);
+    }
 });
+
+
+class App extends Component {
+    render() {
+        return (
+            <Provider store={store}>
+               <LoginOrChat />
+            </Provider>
+        );
+    }
+}
+
+export default App;
