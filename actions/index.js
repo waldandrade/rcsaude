@@ -2,6 +2,7 @@ import firebase from '../firebase';
 import DeviceInfo from 'react-native-device-info';
 import FCM, { FCMEvent, NotificationType, WillPresentNotificationResult, RemoteNotificationResult } from 'react-native-fcm';
 import { Platform } from 'react-native';
+import Expo, { Font } from 'expo';
 
 export const addMessage = (msg) => ({
     type: 'ADD_MESSAGE',
@@ -14,8 +15,7 @@ export const sendMessage = (text, user) => {
                 text: text,
                 time: Date.now(),
                 author: {
-                    name: user.name,
-                    avatar: user.avatar
+                    email: user.email
                 }
             };
 
@@ -80,92 +80,123 @@ export const updateMessagesHeight = (event) => {
 // User actions
 //
 
-export const setUserName = (name) => ({
-    type: 'SET_USER_NAME',
-    name
+export const setEmail = (email) => ({
+    type: 'SET_EMAIL',
+    email
 });
 
-export const setUserAvatar = (avatar) => ({
-    type: 'SET_USER_AVATAR',
-    avatar: avatar && avatar.length > 0 ? avatar : 'https://abs.twimg.com/sticky/default_profile_images/default_profile_3_400x400.png'
+export const setPassword = (password) => ({
+    type: 'SET_PASSWORD',
+    password
 });
 
 export const login = () => {
     return function (dispatch, getState) {
         dispatch(startAuthorizing());
 
-        firebase.auth()
-                .signInAnonymously()
-                .then(() => {
-                    const { name, avatar } = getState().user;
+        const { email, password } = getState().user;
 
-                    firebase.database()
-                            .ref(`users/${DeviceInfo.getUniqueID()}`)
-                            .set({
-                                name,
-                                avatar
-                            });
+        firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+        .then(function() {
+          firebase.auth()
+                  .signInWithEmailAndPassword(email, password)
+                  .then(() => {
 
-                    startChatting(dispatch);
-                });
+                      firebase.database()
+                              .ref(`users/${Expo.Constants.deviceId}`)
+                              // .ref(`users/${DeviceInfo.getUniqueID()}`)
+                              .set({
+                                  email
+                              });
+
+                      startChatting(dispatch);
+                  });
+        })
+        .catch(function(error) {
+          var errorCode = error.code;
+          var errorMessage = error.message;
+        });
     }
 }
 
+const loadAssets = async() => {
+  await Font.loadAsync({
+    'Rubik-Regular': require('../assets/fonts/Rubik-Regular.ttf'),
+    'fontawesome': require('../assets/fonts/fontawesome.ttf'),
+    'icomoon': require('../assets/fonts/icomoon.ttf'),
+    'Righteous-Regular': require('../assets/fonts/Righteous-Regular.ttf'),
+    'Roboto-Bold': require('../assets/fonts/Roboto-Bold.ttf'),
+    'Roboto-Medium': require('../assets/fonts/Roboto-Medium.ttf'),
+    'Roboto-Regular': require('../assets/fonts/Roboto-Regular.ttf'),
+    'Roboto-Light': require('../assets/fonts/Roboto-Light.ttf'),
+  });
+};
+
+export const loadfonts = () => {
+  return function (dispatch, getState) {
+
+    loadAssets();
+
+    dispatch(fontLoaded());
+
+  }
+}
+
 export const checkUserExists = () => {
-    return function (dispatch) {
+    return function (dispatch, getState) {
         dispatch(startAuthorizing());
 
-        firebase.auth()
-                .signInAnonymously()
-                .then(() => firebase.database()
-                                    .ref(`users/${DeviceInfo.getUniqueID()}`)
-                                    .once('value', (snapshot) => {
-                                        const val = snapshot.val();
+        firebase.auth().onAuthStateChanged(function(user) {
+          if (user) {
+            firebase.database()
+              .ref(`users/${Expo.Constants.deviceId}`)
+              //.ref(`users/teste`)
+              .once('value', (snapshot) => {
+                  const val = snapshot.val();
 
-                                        if (val === null) {
-                                            dispatch(userNoExist());
-                                        }else{
-                                            dispatch(setUserName(val.name));
-                                            dispatch(setUserAvatar(val.avatar));
-                                            startChatting(dispatch);
-                                        }
-                                    }))
-                .catch(err => console.log(err))
+                  if (val === null) {
+                      dispatch(userNoExist());
+                  }else{
+                      dispatch(setEmail(val.email));
+                      startChatting(dispatch);
+                  }
+              })
+          }
+        });
     }
 }
 
 const startChatting = function (dispatch) {
     dispatch(userAuthorized());
     dispatch(fetchMessages());
-
-    FCM.requestPermissions();
-    FCM.getFCMToken()
-       .then(token => {
-           console.log(token)
-       });
-    FCM.subscribeToTopic('secret-chatroom');
-
-    FCM.on(FCMEvent.Notification, async (notif) => {
-        console.log(notif);
-
-        if (Platform.OS === 'ios') {
-            switch (notif._notificationType) {
-                case NotificationType.Remote:
-                    notif.finish(RemoteNotificationResult.NewData); //other types available: RemoteNotificationResult.NewData, RemoteNotificationResult.ResultFailed
-                    break;
-                case NotificationType.NotificationResponse:
-                    notif.finish();
-                    break;
-                case NotificationType.WillPresent:
-                    notif.finish(WillPresentNotificationResult.All); //other types available: WillPresentNotificationResult.None
-                    break;
-              }
-            }
-    });
-
-    FCM.on(FCMEvent.RefreshToken, token => {
-        console.log(token);
-    });
+    // FCM.requestPermissions();
+    // FCM.getFCMToken()
+    //    .then(token => {
+    //        console.log(token)
+    //    });
+    // FCM.subscribeToTopic('secret-chatroom');
+    //
+    // FCM.on(FCMEvent.Notification, async (notif) => {
+    //    console.log(notif);
+    //
+    //    if (Platform.OS === 'ios') {
+    //        switch (notif._notificationType) {
+    //            case NotificationType.Remote:
+    //                notif.finish(RemoteNotificationResult.NewData); //other types available: RemoteNotificationResult.NewData, RemoteNotificationResult.ResultFailed
+    //                break;
+    //            case NotificationType.NotificationResponse:
+    //                notif.finish();
+    //                break;
+    //            case NotificationType.WillPresent:
+    //                notif.finish(WillPresentNotificationResult.All); //other types available: WillPresentNotificationResult.None
+    //                break;
+    //          }
+    //        }
+    // });
+    //
+    // FCM.on(FCMEvent.RefreshToken, token => {
+    //    console.log(token);
+    // });
 }
 
 export const startAuthorizing = () => ({
@@ -179,3 +210,7 @@ export const userAuthorized = () => ({
 export const userNoExist = () => ({
     type: 'USER_NO_EXIST'
 });
+
+export const fontLoaded = () => ({
+  type: 'FONT_LOADED'
+})

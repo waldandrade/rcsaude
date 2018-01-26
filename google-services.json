@@ -1,0 +1,45 @@
+{
+  "project_info": {
+    "project_number": "36838720809",
+    "firebase_url": "https://rccard-5d4ee.firebaseio.com",
+    "project_id": "rccard-5d4ee",
+    "storage_bucket": "rccard-5d4ee.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:36838720809:android:8379d391a1e100ba",
+        "android_client_info": {
+          "package_name": "br.com.optiapps.rccard"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "36838720809-o5kihltjr1sgjgfjt41udd5tvtqa2f3e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAAB9ZF1nLVxAnpSZHSMbG8ReKrTNIr_Wo"
+        },
+        {
+          "current_key": "AIzaSyDjWbK9bpI8Sr_-QPxsWKXbIC8IcrXXGNA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

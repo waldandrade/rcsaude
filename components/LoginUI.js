@@ -1,10 +1,11 @@
 import { connect } from 'react-redux';
 import React, { Component } from 'react';
 import { ActivityIndicator, StyleSheet, Text, View, ListView, Image, KeyboardAvoidingView, Animated, Keyboard } from 'react-native';
-import { setUserName, setUserAvatar } from '../actions';
+import { setEmail, setPassword } from '../actions';
 import Input from '../components/Input';
 import Button from '../components/Button';
 import LoginButton from '../containers/LoginButton';
+import { login } from '../actions';
 
 const mapStateToProps = (state) => ({
     authorizing: state.user.authorizing
@@ -44,9 +45,7 @@ class LoginUI extends React.Component {
   }
 
   onPressSignIn() {
-    this.setState({
-      authenticating: true
-    })
+    this.props.dispatch(login());
   }
 
   renderCurrentState() {
@@ -73,7 +72,8 @@ class LoginUI extends React.Component {
           keyboardType={'email-address'}
           returnKeyType={'next'}
           ref="email"
-          onSubmitEditing={setUserName}
+          noclear
+          onSubmitEditing={setEmail}
           blurOnSubmit
         />
         <Input
@@ -84,22 +84,11 @@ class LoginUI extends React.Component {
           color={"#00e3aa"}
           placeholderTextColor={"rgba(244, 249, 247, 0.2)"}
           returnKeyType={'done'}
-          onSubmitEditing={setUserName}
+          noclear
+          onSubmitEditing={setPassword}
           blurOnSubmit
           // onSubmitEditing={() => this.onPressSignIn()}
           ref="password"
-        />
-        <Input
-          placeholder='Digite a URL do avatar...'
-          label='Avatar URL'
-          labelColor={"#f1f1f1"}
-          color={"#00e3aa"}
-          placeholderTextColor={"rgba(244, 249, 247, 0.2)"}
-          keyboardType={'email-address'}
-          returnKeyType={'next'}
-          ref="avatar"
-          onSubmitEditing={setUserName}
-          blurOnSubmit
         />
         <Button onPress={() => this.onPressSignIn()} bgColor={{backgroundColor:"#00e3aa"}}>Log In</Button>
       </KeyboardAvoidingView>

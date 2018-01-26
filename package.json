@@ -21,8 +21,12 @@
   "dependencies": {
     "@shoutem/ui": "^0.23.0",
     "expo": "^23.0.6",
+    "expo-analytics": "^1.0.6",
     "firebase": "^4.9.0",
+    "hoist-non-react-statics": "^2.3.1",
+    "lodash": "^4.17.4",
     "moment": "^2.20.1",
+    "prop-types": "^15.6.0",
     "react": "^16.0.0",
     "react-native": "^0.50.4",
     "react-native-background-timer": "^2.0.0",
@@ -30,11 +34,16 @@
     "react-native-device-info": "^0.13.0",
     "react-native-fcm": "^11.3.0",
     "react-native-keyboard-aware-scroll-view": "^0.4.2",
+    "react-native-keyboard-spacer": "^0.4.1",
     "react-native-linear-gradient": "^2.4.0",
+    "react-native-switch-pro": "^0.4.7",
+    "react-native-ui-kitten": "^3.0.0",
     "react-native-vector-icons": "^4.5.0",
-    "react-navigation": "^1.0.0-beta.19",
+    "react-navigation": "^1.0.0-beta.27",
     "redux": "^3.7.2",
     "redux-logger": "^3.0.6",
-    "redux-thunk": "^2.2.0"
+    "redux-thunk": "^2.2.0",
+    "socket.io-client": "^2.0.4",
+    "victory-native": "^0.16.6"
   }
 }

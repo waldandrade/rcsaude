@@ -1,19 +1,19 @@
 const initialState = {
-    name: null,
-    avatar: 'https://abs.twimg.com/sticky/default_profile_images/default_profile_3_400x400.png',
+    email: null,
+    password: null,
     authorizing: false,
     authorized: false
 };
 
 const user = (state = initialState, action) => {
     switch (action.type) {
-        case 'SET_USER_NAME':
+        case 'SET_EMAIL':
             return Object.assign({}, state, {
-                name: action.name
+                email: action.email
             });
-        case 'SET_USER_AVATAR':
+        case 'SET_PASSWORD':
             return Object.assign({}, state, {
-                avatar: action.avatar
+                password: action.password
             });
         case 'USER_START_AUTHORIZING':
             return Object.assign({}, state, {
