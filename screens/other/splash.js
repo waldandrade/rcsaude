@@ -12,8 +12,8 @@ import {
 } from 'react-native-ui-kitten'
 import {ProgressBar} from '../../components';
 import {
-  KittenTheme
-} from '../../config/theme';
+  DarkKittenTheme
+} from '../../config/darkTheme';
 import {NavigationActions} from 'react-navigation';
 import {scale, scaleModerate, scaleVertical} from '../../utils/scale';
 
@@ -30,7 +30,7 @@ export class SplashScreen extends React.Component {
 
   componentDidMount() {
     StatusBar.setHidden(true, 'none');
-    RkTheme.setTheme(KittenTheme);
+    RkTheme.setTheme(DarkKittenTheme);
 
     this.timer = setInterval(() => {
       if (this.state.progress == 1) {
@@ -41,7 +41,7 @@ export class SplashScreen extends React.Component {
             index: 0,
             actions: [NavigationActions.navigate({routeName: 'Home'})]
           });
-          // this.props.navigation.dispatch(toHome)
+          this.props.navigation.dispatch(toHome)
         }, timeFrame);
       } else {
         let random = Math.random() * 0.5;
@@ -66,10 +66,8 @@ export class SplashScreen extends React.Component {
     return (
       <View style={styles.container}>
         <View>
-          <Image style={[styles.image, {width}]} source={require('../../assets/images/splashBack.png')}/>
+          <Image style={[styles.image, {width}]} source={require('../../assets/images/splashRCSaude.png')}/>
           <View style={styles.text}>
-            <RkText rkType='light' style={styles.hero}>React Native</RkText>
-            <RkText rkType='logo' style={styles.appName}>UI Kitten</RkText>
           </View>
         </View>
         <ProgressBar
@@ -83,7 +81,7 @@ export class SplashScreen extends React.Component {
 
 let styles = StyleSheet.create({
   container: {
-    backgroundColor: KittenTheme.colors.screen.base,
+    backgroundColor: DarkKittenTheme.colors.screen.base,
     justifyContent: 'space-between',
     flex: 1
   },

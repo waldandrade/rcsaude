@@ -1,9 +1,10 @@
 const articles = [{
   'id': 1,
-  'photo': require('../img/photo1.png'),
+  'photo': require('../img/rcimg01.jpg'),
   'type': 'article',
   'time': -300,
-  'header': 'Plants Of Our Nature',
+  'page': 'Perfil',
+  'header': 'Perfil',
   'text': 'Ferns are a very old group of plants. They first appeared on Earth in the middle Devonian Era about 360 million years ago, just before the Carboniferous Era. Most of the modern fern families we see today first appeared in the Late Cretaceous about 45 or 50 million years ago – during the age of the dinosaurs!',
   'comments': [{
     'id': 1,
@@ -40,10 +41,11 @@ const articles = [{
   }]
 }, {
   'id': 2,
-  'photo': require('../img/photo2.png'),
+  'photo': require('../img/rcimg02.jpg'),
   'type': 'article',
+  'page': 'Dashboard',
   'time': -1373,
-  'header': 'Balloon Trip',
+  'header': 'Plano de tratamento e condulta',
   'text': 'Mostly it’s about hot air - for without that balloons are just big empty bags with baskets on the bottom. ' +
   'The Montgolfier brothers had great hopes when they made the first manned flight. ' +
   'They thought balloons would take off as an available means of commercial flight. ' +
@@ -54,29 +56,32 @@ const articles = [{
   'comments': []
 }, {
   'id': 3,
-  'photo': require('../img/photo3.png'),
+  'photo': require('../img/rcimg03.jpg'),
   'type': 'article',
+  'page': 'Perfil',
   'time': -2446,
-  'header': 'Sea World',
+  'header': 'Orientações',
   'text': 'The worlds oceans cover two thirds of our planet. As we take a dive from the rocks or paddle out from the beach, we are entering a place which is teeming with marine life. ' +
   'From fish to crabs to octopuses or even sea creatures that have not yet been discovered, the oceans and its coastlines are an amazing and interesting foray of water wildlife.',
   'comments': []
 }, {
   'id': 4,
-  'photo': require('../img/photo4.png'),
+  'photo': require('../img/rcimg04.jpg'),
   'type': 'article',
+  'page': 'Perfil',
   'time': -3519,
-  'header': 'Flowers',
+  'header': 'Evolução e tratamento',
   'text': 'Flowers did not always exist; they first appeared 140 million years ago. Before that, ferns and cone bearing trees dominated the earth. ' +
   'Several centuries ago in Holland, tulips were more valuable than gold. ' +
   'Broccoli is actually a flower. Some plants such as orchids do not need soil to grow-they get all of their nutrients from the air.',
   'comments': []
 }, {
   'id': 5,
-  'photo': require('../img/photo5.png'),
+  'photo': require('../img/rcimg05.jpg'),
   'type': 'article',
+  'page': 'Perfil',
   'time': -4592,
-  'header': 'Birds Of Our Planet',
+  'header': 'Contato com profissionais',
   'text': 'Birds have feathers, wings, lay eggs and are warm blooded. There are around 10000 different species of birds worldwide. ' +
   'The Ostrich is the largest bird in the world. It also lays the largest eggs and has the fastest maximum running speed (97 kph). ' +
   'Scientists believe that birds evolved from theropod dinosaurs. Birds have hollow bones which help them fly. ' +
@@ -84,90 +89,17 @@ const articles = [{
   'comments': []
 }, {
   'id': 6,
-  'photo': require('../img/photo6.png'),
+  'photo': require('../img/rcimg06.jpg'),
   'type': 'article',
+  'page': 'Perfil',
   'time': -5665,
-  'header': 'Mountains',
+  'header': 'Parceiros e descontos',
   'text': 'Mountains make up about one-fifth of the world\'s landscape, and provide homes to at least one-tenth of the world\'s people. ' +
   'The tallest known mountain in the solar system is Olympus Mons, located on Mars. ' +
   'There are mountains under the surface of the sea! ' +
   'Mountains occur more often in oceans than on land; some islands are the peaks of mountains coming out of the water.',
   'comments': []
-}, {
-  'id': 7,
-  'photo': require('../img/photo45.png'),
-  'type': 'fact',
-  'time': -5665,
-  'header': 'Smile and Frown',
-  'text': 'It takes 17 muscles to smile and 43 to frown.',
-  'comments': []
-}, {
-  'id': 8,
-  'photo': require('../img/photo46.png'),
-  'type': 'fact',
-  'time': -8373,
-  'header': 'Interesting Fact',
-  'text': 'Dolphins sleep with one eye open.',
-  'comments': []
-}, {
-  'id': 9,
-  'photo': require('../img/photo47.png'),
-  'type': 'fact',
-  'time': -565,
-  'header': 'Elephant',
-  'text': 'Elephant is one of the few mammals that can\'t jump.',
-  'comments': []
-}, {
-  'id': 10,
-  'photo': require('../img/photo48.png'),
-  'type': 'fact',
-  'time': -52365,
-  'header': 'Cold Water',
-  'text': 'Cold water weighs less than hot water.',
-  'comments': []
-}, {
-  'id': 11,
-  'photo': require('../img/photo49.png'),
-  'type': 'fact',
-  'time': -1295,
-  'header': 'Our Eyes',
-  'text': 'You blink over 10,000,000 times a year.',
-  'comments': []
-}, {
-  'id': 12,
-  'photo': require('../img/photo17.png'),
-  'type': 'post',
-  'time': -300,
-  'title': 'My Little Kitten',
-  'text': 'I have got a cat. Her name is Matilda. She is quite old for a cat. She is eleven years old. Matilda is very' +
-  ' fluffy. Her back is black and her belly and chest are white. She also has a black muzzle with long white whiskers. ' +
-  'Her legs and paws are white. Matilda has big eyes. Her eyes are light green, but they become yellow in bright sunlight. I love my cat.',
-  'comments': []
-}, {
-  'id': 13,
-  'photo': require('../img/photo18.png'),
-  'type': 'post',
-  'time': -1373,
-  'header': 'Interesting Fact',
-  'text': 'One chef prepared a delicious cake with apples and named it in honor of his beloved Charlotte.',
-  'comments': []
-}, {
-  'id': 14,
-  'photo': require('../img/photo19.png'),
-  'type': 'post',
-  'time': -2446,
-  'header': 'Music In Our Life',
-  'text': 'The scientists say that they can define your character if they know what music you like.',
-  'comments': []
-}, {
-  'id': 15,
-  'photo': require('../img/photo20.png'),
-  'type': 'post',
-  'time': -3519,
-  'header': 'Exciting Adventure',
-  'text': 'My trip to Spain last summer. I think that it was the most interesting trip in my life.',
-  'comments': []
-},
+}
 ];
 
 export default articles;

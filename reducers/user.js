@@ -1,8 +1,11 @@
 const initialState = {
     email: null,
     password: null,
+    nome: null,
+    confirm_password: null,
     authorizing: false,
-    authorized: false
+    authorized: false,
+    new_user: null
 };
 
 const user = (state = initialState, action) => {
@@ -15,6 +18,14 @@ const user = (state = initialState, action) => {
             return Object.assign({}, state, {
                 password: action.password
             });
+        case 'SET_NOME':
+            return Object.assign({}, state, {
+                nome: action.nome
+            });
+        case 'SET_CONFIRM_PASSWORD':
+            return Object.assign({}, state, {
+                confirm_password: action.confirm_password
+            });
         case 'USER_START_AUTHORIZING':
             return Object.assign({}, state, {
                 authorizing: true
@@ -24,10 +35,26 @@ const user = (state = initialState, action) => {
                 authorizing: false,
                 authorized: true
             });
+        case 'USER_OUT':
+            return Object.assign({}, state, {
+                authorizing: false,
+                authorized: false,
+                email: null,
+                password: null,
+                new_user: null
+            });
         case 'USER_NO_EXIST':
             return Object.assign({}, state, {
                 authorizing: false,
                 authorized: false
+            });
+        case 'NEW_USER':
+            return Object.assign({}, state, {
+                authorizing: false,
+                authorized: false,
+                email: null,
+                password: null,
+                new_user: true
             });
 
         default:

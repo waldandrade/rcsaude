@@ -5,7 +5,9 @@ import {
   View,
   Image,
   TouchableOpacity,
-  Modal
+  Modal,
+  Button,
+  ScrollView
 } from 'react-native';
 import {
   RkText,
@@ -19,34 +21,41 @@ import {data} from '../../data';
 import {PasswordTextInput} from '../../components/passwordTextInput';
 import {UIConstants} from '../../config/appConstants';
 import {scale, scaleModerate, scaleVertical} from '../../utils/scale';
+import {Avatar} from '../../components/avatar';
+import { Constants } from 'expo';
+import { Articles1 } from '../articles/articles1';
 
 export class Cards extends React.Component {
   static navigationOptions = {
-    title: 'Cards'.toUpperCase()
+    title: 'Perfil'.toUpperCase()
   };
 
   constructor(props) {
     super(props);
     this.data = data.getCards();
-    this.state = {modalVisible: false}
+    this.state = {
+      page: 'BENEFICIOS',
+      modalVisible: false
+    };
+    this.user = data.getUser(1);
   }
 
   _getCardStyle(type) {
     switch (type) {
       case 'visa':
         return {
-          gradient: RkTheme.current.colors.gradients.visa,
+          gradient: ['#00555a','#002d4b'],
           icon: require('../../assets/icons/visaIcon.png')
         };
       case 'mastercard':
         return {
-          gradient: RkTheme.current.colors.gradients.mastercard,
+          gradient: ['#00555a','#002d4b'],
           icon: require('../../assets/icons/masterCardIcon.png')
         };
       case 'axp':
         return {
-          gradient: RkTheme.current.colors.gradients.axp,
-          icon: require('../../assets/icons/americanExpressIcon.png')
+          gradient: ['#00555a','#002d4b'],
+          icon: require('../../assets/icons/rcSaudeIcon.png')
         };
     }
   }
@@ -73,15 +82,12 @@ export class Cards extends React.Component {
   _renderFooter() {
     return (
       <View style={styles.footer}>
-        <RkButton style={styles.button} rkType='circle highlight'>
-          <Image source={require('../../assets/icons/iconPlus.png')}/>
-        </RkButton>
       </View>
     )
   }
 
-  _setModalVisible(visible) {
-    this.setState({modalVisible: visible});
+  _goToPage(page) {
+    this.setState({page: page});
   }
 
   _renderItem(info) {
@@ -92,32 +98,31 @@ export class Cards extends React.Component {
     return (
       <RkCard rkType='credit' style={styles.card}>
         <TouchableOpacity delayPressIn={70}
-                          activeOpacity={0.8}
-                          onPress={() => this._setModalVisible(true)}>
+                          activeOpacity={0.8}>
           <LinearGradient colors={gradient}
                           start={{x: 0.0, y: 0.5}}
                           end={{x: 1, y: 0.5}}
                           style={styles.background}>
             <View rkCardHeader>
-              <RkText rkType='header4 inverseColor'>{info.item.bank}</RkText>
+              <RkText rkType='header4 inverseColor'></RkText>
               <Image source={icon}/>
             </View>
             <View rkCardContent>
               <View style={styles.cardNoContainer}>
-                <RkText style={styles.cardNo} rkType='header2 inverseColor'>{firstPart}</RkText>
-                <RkText style={[styles.cardNo, styles.cardPlaceholder]} rkType='header2 inverseColor'>* * * *</RkText>
-                <RkText style={[styles.cardNo, styles.cardPlaceholder]} rkType='header2 inverseColor'>* * * *</RkText>
-                <RkText style={styles.cardNo} rkType='header2 inverseColor'>{lastPart}</RkText>
+                <RkText style={styles.cardNo} rkType='header2 inverseColor'>0000</RkText>
+                <RkText style={[styles.cardNo]} rkType='header2 inverseColor'>0066</RkText>
+                <RkText style={[styles.cardNo]} rkType='header2 inverseColor'>8659</RkText>
+                <RkText style={styles.cardNo} rkType='header2 inverseColor'>6450</RkText>
               </View>
-              <RkText style={styles.date} rkType='header6 inverseColor'>{info.item.date}</RkText>
+              <RkText style={styles.date} rkType='header6 inverseColor'>val {info.item.date}</RkText>
             </View>
             <View rkCardFooter>
               <View>
-                <RkText rkType='header4 inverseColor'>{info.item.currency.toUpperCase()}</RkText>
-                <RkText rkType='header6 inverseColor'>{info.item.name.toUpperCase()}</RkText>
+                <RkText rkType='header4 inverseColor'>WALDNEY S ANDRADE</RkText>
+                <RkText rkType='header6 inverseColor'>Natal-RN</RkText>
               </View>
               <RkText
-                rkType='header2 inverseColor'>{this._formatCurrency(info.item.amount, info.item.currency)}</RkText>
+                rkType='header2 inverseColor'></RkText>
             </View>
           </LinearGradient>
         </TouchableOpacity>
@@ -126,49 +131,52 @@ export class Cards extends React.Component {
   }
 
   render() {
+    let name = `${this.user.firstName} ${this.user.lastName}`;
+
     return (
-      <View style={styles.root}>
+      <ScrollView style={styles.root}>
+        <View style={[styles.header, styles.bordered]}>
+          <Avatar img={this.user.photo} rkType='big'/>
+          <RkText rkType='header2'>{name}</RkText>
+        </View>
+        <View style={styles.buttons}>
+          <RkButton style={styles.button} rkType='clear link white'>CARTÃO</RkButton>
+          <View style={styles.separator}/>
+          <RkButton style={styles.button} rkType='clear link white'  onPress={() => this.props.navigation.navigate('Edit')}>EDITAR</RkButton>
+        </View>
         <FlatList style={styles.list}
                   showsVerticalScrollIndicator={false}
                   ListFooterComponent={() => this._renderFooter()}
                   keyExtractor={(item) => item.id}
                   data={this.data}
                   renderItem={(info) => this._renderItem(info)}/>
-        <Modal
-          animationType={'fade'}
-          transparent={true}
-          onRequestClose={() => this._setModalVisible(false)}
-          visible={this.state.modalVisible}>
-          <View style={styles.popupOverlay}>
-            <View style={styles.popup}>
-              <View style={styles.popupContent}>
-                <RkText style={styles.popupHeader} rkType='header4'>Enter security code</RkText>
-                <PasswordTextInput/>
-              </View>
-              <View style={styles.popupButtons}>
-                <RkButton onPress={() => this._setModalVisible(false)}
-                          style={styles.popupButton}
-                          rkType='clear'>
-                  <RkText rkType='light'>CANCEL</RkText>
-                </RkButton>
-                <View style={styles.separator}/>
-                <RkButton onPress={() => this._setModalVisible(false)}
-                          style={styles.popupButton}
-                          rkType='clear'>
-                  <RkText>OK</RkText>
-                </RkButton>
-              </View>
-            </View>
-          </View>
-        </Modal>
-      </View>
+      </ScrollView>
     )
   }
 }
 
+RkTheme.setType('RkButton', 'white', {
+  color: "#000000"
+});
+
 let styles = RkStyleSheet.create(theme => ({
   root: {
-    backgroundColor: theme.colors.screen.base,
+    backgroundColor: '#FFFFF0',
+    flex: 1
+  },
+  header: {
+    backgroundColor: '#002d4b',
+    alignItems: 'center',
+    paddingTop: 25,
+    paddingBottom: 17
+  },
+  userInfo: {
+    flexDirection: 'row',
+    paddingVertical: 18,
+  },
+  bordered: {
+    borderBottomWidth: 1,
+    borderColor: theme.colors.border.base
   },
   list: {
     marginHorizontal: 16,
@@ -196,9 +204,21 @@ let styles = RkStyleSheet.create(theme => ({
     marginBottom: scaleVertical(16),
     alignItems: 'center'
   },
+  separator: {
+    backgroundColor: theme.colors.border.base,
+    alignSelf: 'center',
+    flexDirection: 'row',
+    flex: 0,
+    width: 1,
+    height: 42
+  },
+  buttons: {
+    flexDirection: 'row',
+    paddingVertical: 8,
+  },
   button: {
-    height: 56,
-    width: 56
+    flex: 1,
+    alignSelf: 'center'
   },
   popup: {
     backgroundColor: theme.colors.screen.base,
@@ -227,9 +247,5 @@ let styles = RkStyleSheet.create(theme => ({
   popupButton: {
     flex: 1,
     marginVertical: 16
-  },
-  separator: {
-    backgroundColor: theme.colors.border.base,
-    width: 1
   }
 }));

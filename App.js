@@ -1,25 +1,28 @@
 import React, { Component } from 'react';
 import {
   DrawerNavigator,
-  StackNavigator
+  StackNavigator,
+  addNavigationHelpers
 } from 'react-navigation';
-import { View } from 'react-native';
+import {
+  createReduxBoundAddListener,
+  createReactNavigationReduxMiddleware,
+} from 'react-navigation-redux-helpers';
+import { View, BackHandler } from 'react-native';
 import { createStore, applyMiddleware } from 'redux';
 import { Provider, connect } from 'react-redux';
 import thunkMiddleware from 'redux-thunk';
 import { createLogger } from 'redux-logger';
 // import {AppRoutes} from './config/navigation/routesBuilder';
+import { KittenApp } from "./components/NavApp"
 import LoginUI from "./components/LoginUI";
 import ChatUI from "./components/ChatUI"
 import rootReducer from './reducers';
-import { fetchMessages, checkUserExists, loadfonts } from './actions';
 import Expo, { AppLoading, Font } from 'expo';
 import SocketIOClient from 'socket.io-client';
-import { Cards } from './screens/perfil';
-import {withRkTheme} from 'react-native-ui-kitten';
+import {withRkTheme, RkTheme,} from 'react-native-ui-kitten';
 import {bootstrap} from './config/bootstrap';
 import {data} from './data'
-import * as Screens from './screens';
 import track from './config/analytics';
 
 bootstrap();
@@ -50,21 +53,6 @@ const store = createStore(
     )
 );
 
-// src/App.js
-const LoginOrChat = connect(
-    (state) => ({
-        authorized: state.user.authorized
-    })
-)(({ authorized, dispatch }) => {
-    if (authorized) {
-        return (<KittenApp />);
-    }else{
-        // dispatch(loadfonts());
-        dispatch(checkUserExists());
-        return (<Screens.SplashScreen />);
-    }
-});
-
 async function getNotificationAsync() {
   const { Notifications, Permissions } = Expo;
   const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
@@ -84,19 +72,64 @@ async function alertIfRemoteNotificationsDisabledAsync() {
   }
 }
 
-class App extends Component {
+// Note: createReactNavigationReduxMiddleware must be run before createReduxBoundAddListener
+const middleware = createReactNavigationReduxMiddleware(
+  "root",
+  state => state.nav,
+);
+const addListener = createReduxBoundAddListener("root");
 
-  state = {
-    loaded: false
+class App extends React.Component {
+
+  componentDidMount() {
+    BackHandler.addEventListener("hardwareBackPress", this.onBackPress);
+  }
+  componentWillUnmount() {
+    BackHandler.removeEventListener("hardwareBackPress", this.onBackPress);
+  }
+  onBackPress = () => {
+    const { dispatch, nav } = this.props;
+    if (nav.index === 0) {
+      return false;
+    }
+    dispatch(NavigationActions.back());
+    return true;
   };
+
+  render() {
+
+    const { dispatch, nav } = this.props;
+    const navigation = addNavigationHelpers({
+      dispatch,
+      state: nav,
+      addListener,
+    });
+
+    return (
+      <KittenApp navigation={navigation} />
+    );
+  }
+}
+
+const mapStateToProps = (state) => ({
+  nav: state.nav
+});
+
+const AppWithNavigationState = connect(mapStateToProps)(App);
+
+export default class Root extends Component {
 
   constructor(props) {
     super(props);
     // Creating the socket-client instance will automatically connect to the server.
-    this.socket = SocketIOClient('http://172.30.3.2:3000', { transports: ['websocket'] });
+    this.socket = SocketIOClient('http://192.168.0.23:3000', { transports: ['websocket'] });
 
     this.socket.emit('enter room', {"room":20, "message":"Olá Mundo!"});
   }
+
+  state = {
+    loaded: false
+  };
 
   componentWillMount() {
     this._loadAssets();
@@ -124,47 +157,10 @@ class App extends Component {
 
         return (
             <Provider store={store}>
-               <LoginOrChat />
+               <KittenApp />
             </Provider>
         );
     }
 }
 
-// let SideMenu = withRkTheme(Screens.SideMenu);
-const KittenApp = StackNavigator({
-  Home: {
-    screen: DrawerNavigator({
-        Home: {
-          screen: ChatUI,
-        }
-      },
-      {
-        drawerOpenRoute: 'DrawerOpen',
-        drawerCloseRoute: 'DrawerClose',
-        drawerToggleRoute: 'DrawerToggle'
-      })
-  }
-}, {
-  headerMode: 'none',
-});
-
-class Inicio extends Component {
-  render() {
-    return (
-      <View style={{flex: 1}}>
-        <KittenApp
-          onNavigationStateChange={(prevState, currentState) => {
-            const currentScreen = getCurrentRouteName(currentState);
-            const prevScreen = getCurrentRouteName(prevState);
-
-            if (prevScreen !== currentScreen) {
-              track(currentScreen);
-            }
-          }}
-        />
-      </View>
-    );
-  }
-}
-
-export default App;
+Expo.registerRootComponent(Root);

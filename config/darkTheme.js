@@ -26,7 +26,7 @@ const Colors = {
   google: '#ffffff',
   facebook: '#ffffff',
 
-  gradientBaseBegin: '#6b35e4',
+  gradientBaseBegin: '#00e3aa',
   gradientBaseEnd: '#6b35e4',
   gradientVisaBegin: '#63e2ff',
   gradientVisaEnd: '#712ec3',

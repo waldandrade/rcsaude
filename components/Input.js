@@ -7,7 +7,17 @@ class Input extends Component {
         text: null
     }
 
-    onChangeText = text => this.setState({text: text});
+    focus = () => {
+      this._textInput.focus();
+    }
+
+    blur = () => {
+      this._textInput.blur();
+    }
+
+    onChangeText = text => {
+      this.setState({text: text});
+    }
 
     onSubmitEditing = () => {
         this.props.dispatch(
@@ -23,12 +33,12 @@ class Input extends Component {
 
     onFocus = (event) => {
         if (this.props.onFocus) {
-            this.props.onFocus(this.refs.input);
+            this.props.onFocus(this._textInput.input);
         }
     }
 
     onBlur = () => {
-        if (this.props.submitOnBlur) {
+        if (this.props.onBlur) {
             this.onSubmitEditing();
         }
     }
@@ -53,13 +63,17 @@ class Input extends Component {
                 keyboardType={this.props.keyboardType}
                 autoCapitalize={'none'}
                 returnKeyType={this.props.returnKeyType}
-                blurOnSubmit={this.props.blurOnSubmit}
                 onFocus={this.onFocus}
                 onBlur={this.onBlur}
                 onChangeText={this.onChangeText}
                 onSubmitEditing={this.onSubmitEditing}
                 onLayout={this.onLayout}
-                ref="input"
+                blurOnSubmit
+                blur={this.blur}
+                focus={this.focus}
+                onEndEditing={this.onSubmitEditing}
+                focus={this.props.focus}
+                ref={component => this._textInput = component}
               />
             </View>
         )

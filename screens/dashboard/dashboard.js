@@ -124,5 +124,3 @@ let styles = RkStyleSheet.create(theme => ({
     justifyContent: 'center'
   },
 }));
-
-

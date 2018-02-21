@@ -1,9 +1,13 @@
+import { connect } from 'react-redux';
 import React from 'react';
 import {
   View,
   Image,
   Dimensions,
-  Keyboard
+  Keyboard,
+  KeyboardAvoidingView,
+  Animated,
+  ActivityIndicator
 } from 'react-native';
 import {
   RkButton,
@@ -16,6 +20,14 @@ import {
 import {FontAwesome} from '../../assets/icons';
 import {GradientButton} from '../../components/gradientButton';
 import {scale, scaleModerate, scaleVertical} from '../../utils/scale';
+import { setEmail, setPassword, login, signup } from '../../actions';
+import Input from '../../components/Input';
+import { Constants } from 'expo';
+
+
+const mapStateToProps = (state) => ({
+    authorizing: state.user.authorizing
+});
 
 export class LoginV1 extends React.Component {
   static navigationOptions = {
@@ -24,68 +36,137 @@ export class LoginV1 extends React.Component {
 
   constructor(props) {
     super(props);
+    this.margin = new Animated.Value(20);
+    this.keyboardWillShowSub = null;
+    this.keyboardWillHideSub = null;
+  }
+
+  keyboardDidShow = (event) => {
+    Animated.timing(this.margin, {
+      duration: event.duration,
+      toValue: -40
+    }).start();
+  };
+
+  keyboardDidHide = (event) => {
+    Animated.timing(this.margin, {
+      duration: 20,
+      toValue: 20,
+    }).start();
+  };
+
+  componentWillMount () {
+    this.keyboardWillShowSub = Keyboard.addListener('keyboardDidShow', this.keyboardDidShow);
+    this.keyboardWillHideSub = Keyboard.addListener('keyboardDidHide', this.keyboardDidHide);
+  }
+
+  componentWillUnmount() {
+    this.keyboardWillShowSub.remove();
+    this.keyboardWillHideSub.remove();
+  }
+
+  onPressSignIn() {
+    Keyboard.dismiss();
+    setTimeout(() => this.props.screenProps.dispatch(login()), 1000);
+  }
+
+  onPressSignUp() {
+    this.props.screenProps.dispatch(signup());
   }
 
   _renderImage(image) {
+
     let contentHeight = scaleModerate(375, 1);
-    let height = Dimensions.get('window').height - contentHeight;
-    let width = Dimensions.get('window').width;
+    let height = new Animated.Value(Dimensions.get('window').height - contentHeight - 20);
+    let width = new Animated.Value(Dimensions.get('window').width);
 
     if (RkTheme.current.name === 'light')
-      image = (<Image style={[styles.image, {height, width}]}
-                      source={require('../../assets/images/backgroundLoginV1.png')}/>);
+      image = (<Animated.Image  style={[styles.image, {height, width, marginBottom: this.margin, marginTop: this.margin}]} source={require('../../assets/images/backgroundLoginV1.png')}/>);
     else
-      image = (<Image style={[styles.image, {height, width}]}
-                      source={require('../../assets/images/backgroundLoginV1DarkTheme.png')}/>);
+      image = (<Animated.Image  style={[styles.image, {height, width, marginBottom: this.margin, marginTop: this.margin}]} source={require('../../assets/images/backgroundLoginV1DarkTheme.png')}/>);
     return image;
   }
 
-  render() {
+  renderCurrentState() {
+
+    if (this.props.authorizing) {
+      return (
+        <View style={styles.form}>
+          <ActivityIndicator size='large' />
+        </View>
+      )
+    }
+
     let image = this._renderImage();
 
     return (
-      <RkAvoidKeyboard
-        onStartShouldSetResponder={ (e) => true}
-        onResponderRelease={ (e) => Keyboard.dismiss()}
-        style={styles.screen}>
+      <KeyboardAvoidingView
+        style={styles.screen}
+        behavior="padding"
+      >
         {image}
         <View style={styles.container}>
-          <View style={styles.buttons}>
-            <RkButton style={styles.button} rkType='social'>
-              <RkText rkType='awesome hero accentColor'>{FontAwesome.twitter}</RkText>
-            </RkButton>
-            <RkButton style={styles.button} rkType='social'>
-              <RkText rkType='awesome hero accentColor'>{FontAwesome.google}</RkText>
-            </RkButton>
-            <RkButton style={styles.button} rkType='social'>
-              <RkText rkType='awesome hero accentColor'>{FontAwesome.facebook}</RkText>
-            </RkButton>
-          </View>
-          <RkTextInput rkType='rounded' placeholder='Username'/>
-          <RkTextInput rkType='rounded' placeholder='Password' secureTextEntry={true}/>
-          <GradientButton onPress={() => {
-            this.props.navigation.goBack()
-          }} rkType='large' style={styles.save} text='LOGIN'/>
+          <Input
+            placeholder='Digite seu email...'
+            label='Email'
+            labelColor={"#f1f1f1"}
+            color={"#00e3aa"}
+            placeholderTextColor={"rgba(244, 249, 247, 0.2)"}
+            keyboardType={'email-address'}
+            returnKeyType={'next'}
+            ref={component => this._email = component}
+            noclear
+            onSubmitEditing={setEmail}
+            onBlur={setEmail}
+            blurOnSubmit
+          />
+          <Input
+            placeholder='Digite sua senha...'
+            label='Senha'
+            secureTextEntry
+            labelColor={"#f1f1f1"}
+            color={"#00e3aa"}
+            placeholderTextColor={"rgba(244, 249, 247, 0.2)"}
+            returnKeyType={'done'}
+            noclear
+            onSubmitEditing={setPassword}
+            onBlur={setPassword}
+            blurOnSubmit
+            ref={component => this._password = component}
+          />
+          <GradientButton onPress={() => this.onPressSignIn()} rkType='large' style={styles.save} text='LOGIN'/>
           <View style={styles.footer}>
             <View style={styles.textRow}>
-              <RkText rkType='primary3'>Don’t have an account?</RkText>
+              <RkText rkType='primary3'>Não tem uma conta?</RkText>
               <RkButton rkType='clear'>
-                <RkText rkType='header6' onPress={() => this.props.navigation.navigate('SignUp')}> Sign up
-                  now </RkText>
+                <RkText rkType='header6' onPress={() => this.onPressSignUp()}> Cadastre-se agora </RkText>
               </RkButton>
             </View>
           </View>
         </View>
-      </RkAvoidKeyboard>
+      </KeyboardAvoidingView>
+    )
+  }
+
+  render() {
+    return (
+      <View style={styles.root}>
+        {this.renderCurrentState()}
+      </View>
     )
   }
 }
 
 let styles = RkStyleSheet.create(theme => ({
+  root: {
+    flex: 1,
+    paddingTop: Constants.statusBarHeight
+  },
   screen: {
     flex: 1,
     alignItems: 'center',
-    backgroundColor: theme.colors.screen.base
+    backgroundColor: theme.colors.screen.base,
+    paddingTop: Constants.statusBarHeight
   },
   image: {
     resizeMode: 'cover',
@@ -95,7 +176,8 @@ let styles = RkStyleSheet.create(theme => ({
     paddingHorizontal: 17,
     paddingBottom: scaleVertical(22),
     alignItems: 'center',
-    flex: -1
+    width: '100%',
+    flex: 1
   },
   footer: {
     justifyContent: 'flex-end',

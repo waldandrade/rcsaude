@@ -3,7 +3,7 @@ import {
   StyleSheet
 } from 'react-native';
 import {RkTheme} from 'react-native-ui-kitten';
-import {KittenTheme} from './theme';
+import {DarkKittenTheme} from './darkTheme';
 import {AvatarTypes} from '../components/avatar/types';
 import {GradientButtonTypes} from '../components/gradientButton/types';
 import {SwitchTypes} from '../components/switch/types';
@@ -12,7 +12,7 @@ import {scale, scaleModerate, scaleVertical} from '../utils/scale';
 
 export let bootstrap = () => {
 
-  RkTheme.setTheme(KittenTheme, null);
+  RkTheme.setTheme(DarkKittenTheme);
 
   /*
    RkText types
@@ -355,10 +355,10 @@ export let bootstrap = () => {
       borderRadius: 0
     },
     img: {
-      height: 225
+      height: 150
     },
     imgOverlay: {
-      height: 225,
+      height: 150,
       backgroundColor: 'transparent'
     },
     content: {

@@ -90,13 +90,31 @@ export const setPassword = (password) => ({
     password
 });
 
+export const setNome = (nome) => ({
+    type: 'SET_NOME',
+    nome
+});
+
+export const setConfirmPassword = (confirm_password) => ({
+    type: 'SET_CONFIRM_PASSWORD',
+    confirm_password
+});
+
+export const logout = () => {
+  return function (dispatch) {
+    firebase.auth().signOut().then(function() {
+      dispatch(userOut());
+    });
+  }
+}
+
 export const login = () => {
     return function (dispatch, getState) {
         dispatch(startAuthorizing());
 
         const { email, password } = getState().user;
 
-        firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+        firebase.auth().setPersistence("local")
         .then(function() {
           firebase.auth()
                   .signInWithEmailAndPassword(email, password)
@@ -117,6 +135,12 @@ export const login = () => {
           var errorMessage = error.message;
         });
     }
+}
+
+export const signup = () => {
+  return function (dispatch, getState) {
+      dispatch(startSignup());
+  }
 }
 
 const loadAssets = async() => {
@@ -201,6 +225,14 @@ const startChatting = function (dispatch) {
 
 export const startAuthorizing = () => ({
     type: 'USER_START_AUTHORIZING'
+});
+
+export const startSignup = () => ({
+    type: 'NEW_USER'
+});
+
+export const userOut = () => ({
+    type: 'USER_OUT'
 });
 
 export const userAuthorized = () => ({
