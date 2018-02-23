@@ -4,11 +4,12 @@ import {
   FlatList,
   View,
   Image,
-  TouchableOpacity,
   Modal,
   Button,
-  ScrollView
+  ScrollView,
+  TouchableOpacity
 } from 'react-native';
+import { connect } from 'react-redux';
 import {
   RkText,
   RkCard,
@@ -22,10 +23,12 @@ import {PasswordTextInput} from '../../components/passwordTextInput';
 import {UIConstants} from '../../config/appConstants';
 import {scale, scaleModerate, scaleVertical} from '../../utils/scale';
 import {Avatar} from '../../components/avatar';
-import { Constants } from 'expo';
+import { ImagePicker, Constants } from 'expo';
 import { Articles1 } from '../articles/articles1';
+import { updatePhoto } from '../../actions';
+import Icon from 'react-native-vector-icons/Ionicons'; // 4.4.2
 
-export class Cards extends React.Component {
+class Cards extends React.Component {
   static navigationOptions = {
     title: 'Perfil'.toUpperCase()
   };
@@ -35,8 +38,10 @@ export class Cards extends React.Component {
     this.data = data.getCards();
     this.state = {
       page: 'BENEFICIOS',
-      modalVisible: false
+      modalVisible: false,
+      nome: props.screenProps.nome
     };
+
     this.user = data.getUser(1);
   }
 
@@ -71,6 +76,20 @@ export class Cards extends React.Component {
         break;
     }
     return `${symbol}${amount}`;
+  }
+
+  _pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      allowsEditing: true,
+      aspect: [4, 4],
+      base64: true
+    });
+
+    var img = `data:image/jpeg;base64,${result.base64}`;
+
+    if (!result.cancelled) {
+      this.props.screenProps.dispatch(updatePhoto(img));
+    }
   }
 
   _prepareCardNo(cardNo) {
@@ -131,18 +150,25 @@ export class Cards extends React.Component {
   }
 
   render() {
-    let name = `${this.user.firstName} ${this.user.lastName}`;
-
     return (
       <ScrollView style={styles.root}>
         <View style={[styles.header, styles.bordered]}>
-          <Avatar img={this.user.photo} rkType='big'/>
-          <RkText rkType='header2'>{name}</RkText>
+          <Avatar img={this.user.photo} rkType='big' onPress={this._pickImage}/>
+          <TouchableOpacity style={{
+       borderWidth:1,
+       borderColor:'rgba(0,0,0,0.2)',
+       alignItems:'center',
+       justifyContent:'center',
+       width:100,
+       height:100,
+       backgroundColor:'#fff',
+       borderRadius:100,
+     }} onPress={this._pickImage}>
+            <Icon name={'ios-brush'} size={10} color="#01a699"/>
+          </TouchableOpacity>
         </View>
         <View style={styles.buttons}>
           <RkButton style={styles.button} rkType='clear link white'>CARTÃO</RkButton>
-          <View style={styles.separator}/>
-          <RkButton style={styles.button} rkType='clear link white'  onPress={() => this.props.navigation.navigate('Edit')}>EDITAR</RkButton>
         </View>
         <FlatList style={styles.list}
                   showsVerticalScrollIndicator={false}
@@ -249,3 +275,27 @@ let styles = RkStyleSheet.create(theme => ({
     marginVertical: 16
   }
 }));
+
+const mapStateToProps = (state) => {
+  return {
+    nome: state.nome
+  }
+}
+
+const Perfil = connect(
+  mapStateToProps
+)(({ nome }) => {
+    return (
+      <Cards screenProps={{nome}}/>
+    );
+});
+
+export class PerfilCards extends React.Component {
+  static navigationOptions = {
+    title: 'Perfil'.toUpperCase()
+  };
+
+  render() {
+    return (<Perfil />);
+  }
+}

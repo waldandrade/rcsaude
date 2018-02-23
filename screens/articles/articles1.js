@@ -126,7 +126,7 @@ export class Articles1 extends React.Component {
           <View style={styles.container}>
             <ImageBackground
               source={{
-                uri: 'https://images.unsplash.com/photo-1501426026826-31c667bdf23d?dpr=1&auto=compress,format&fit=crop&w=1576&h=&q=80&cs=tinysrgb&crop=',
+                uri: '../../assets/images/plank-1327256_640.jpg',
               }}
               style={styles.imageBg}>
               <View style={styles.upperContainer}>
@@ -139,7 +139,7 @@ export class Articles1 extends React.Component {
                     <Text style={styles.degree}>Aguarde</Text>
                   </View>
                   <Text style={styles.status}>{this.state.weather}</Text>
-                  <Text style={styles.description}>Logo está opção estará disponível</Text>
+                  <Text style={styles.description}>Logo esta função estará disponível</Text>
                 </View>
               </View>
             </ImageBackground>

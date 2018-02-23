@@ -95,6 +95,11 @@ export const setNome = (nome) => ({
     nome
 });
 
+export const setPhoto = (photo) => ({
+  type: 'SET_PHOTO',
+  photo
+});
+
 export const setConfirmPassword = (confirm_password) => ({
     type: 'SET_CONFIRM_PASSWORD',
     confirm_password
@@ -153,6 +158,27 @@ export const cadastro = () => {
     }
 }
 
+export const updatePhoto = (photo) => {
+  return function (dispatch) {
+    let user = firebase.auth().currentUser;
+    if(user){
+      let userId = user.uid;
+      var storageRef = firebase.storage().ref();
+      var avatarRef = storageRef.child(`${userId}/avatar.jpg`);
+      // avatarRef.putString(message, `${photo}`).then(function(snapshot) {
+      //  console.log('Uploaded a data_url string!');
+      // });
+      avatarRef.put(photo).then(function(snapshot) {
+        console.log(`snapshot: ${snapshot}`);
+        dispatch(setPhoto(snapshot.url));
+        console.log('Uploaded a blob or file!');
+      }).catch(function(error){
+        console.log(error.message);    
+      });
+    }
+  }
+}
+
 const loadAssets = async() => {
   await Font.loadAsync({
     'Rubik-Regular': require('../assets/fonts/Rubik-Regular.ttf'),
@@ -186,16 +212,11 @@ export const checkUserExists = () => {
           if (user) {
             let userId = user.uid;
             const ref = firebase.database().ref(`users/${userId}`);
-            console.log(`userId: ${userId}`);
-            console.log(`ref: ${ref}`);
             ref.once('value', (snapshot) => {
                   const val = snapshot.val();
-                  console.log(`val: ${val}`);
-
                   if (val === null) {
-                    console.log("val null");
                         ref.set({
-                                  username: nome,
+                                  nome: nome,
                                   email: user.email
                                 }).then(() => {
                                   console.log("DEU CERTO!");
@@ -208,8 +229,10 @@ export const checkUserExists = () => {
                                   console.log(errorMessage);
                                 });
                   }else{
-                    console.log("val not null");
+                    console.log(`email: ${val.email}`);
+                    console.log(`nome: ${val.nome}`);
                       dispatch(setEmail(val.email));
+                      dispatch(setNome(val.nome));
                       dispatch(userAuthorized());
                   }
               });

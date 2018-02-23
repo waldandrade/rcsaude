@@ -1,7 +1,8 @@
 import React from 'react';
 import {
   Image,
-  View
+  View,
+  Button
 } from 'react-native';
 import {
   RkComponent,
@@ -28,7 +29,6 @@ export class Avatar extends RkComponent {
     return (
       <View>
         <Image style={image} source={this.props.img}/>
-        { this.props.badge && this.renderBadge(badge, badgeText)}
       </View>
     )
   }
@@ -56,6 +56,10 @@ export class Avatar extends RkComponent {
         <RkText rkType='awesome' style={[textStyle, {color}]}>
           {symbol}
         </RkText>
+        <Button onPress={() => this.props.onPress}
+  icon={{ name: 'filter-list' }}
+  color="#841584"
+  accessibilityLabel="Learn more about this purple button"/>
       </View>
     )
   };

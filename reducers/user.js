@@ -2,6 +2,7 @@ const initialState = {
     email: null,
     password: null,
     nome: null,
+    photo: null,
     chat_token: null,
     confirm_password: null,
     authorizing: false,
@@ -22,6 +23,10 @@ const user = (state = initialState, action) => {
         case 'SET_NOME':
             return Object.assign({}, state, {
                 nome: action.nome
+            });
+        case 'SET_PHOTO':
+            return Object.assign({}, state, {
+                photo: action.photo
             });
         case 'SET_CONFIRM_PASSWORD':
             return Object.assign({}, state, {

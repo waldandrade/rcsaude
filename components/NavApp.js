@@ -5,7 +5,7 @@ import {
 } from 'react-navigation';
 import { Button, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
-import { Cards } from '../screens/perfil';
+import { PerfilCards } from '../screens/perfil';
 import { checkUserExists } from '../actions';
 import { SplashScreen } from '../screens/other';
 import { LoginV1, SignUp } from '../screens/login';
@@ -22,7 +22,7 @@ const RCSaude = StackNavigator({
       screen: Articles1
     },
     Perfil: {
-      screen: Cards
+      screen: PerfilCards
     },
     Dashboard: {
       screen: Dashboard

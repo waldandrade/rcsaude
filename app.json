@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "rccardsaude",
+    "name": "RC Card Saúde",
     "description": "This project is really great.",
     "slug": "rccardsaude",
     "privacy": "public",
@@ -9,8 +9,21 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
+    "packagerOpts": {
+      "assetExts": [
+        "ttf",
+        "mp4",
+        "otf",
+        "xml"
+      ]
+    },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "br.com.rccardsaude.app"
+    },
+    "android": {
+      "package": "br.com.rccardsaude.app",
+      "versionCode": 1
     }
   }
 }
