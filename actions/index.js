@@ -118,16 +118,9 @@ export const login = () => {
         .then(function() {
           firebase.auth()
                   .signInWithEmailAndPassword(email, password)
-                  .then(() => {
-
-                      firebase.database()
-                              .ref(`users/${Expo.Constants.deviceId}`)
-                              // .ref(`users/${DeviceInfo.getUniqueID()}`)
-                              .set({
-                                  email
-                              });
-
-                      startChatting(dispatch);
+                  .catch(function(error) {
+                    var errorCode = error.code;
+                    var errorMessage = error.message;
                   });
         })
         .catch(function(error) {
@@ -141,6 +134,23 @@ export const signup = () => {
   return function (dispatch, getState) {
       dispatch(startSignup());
   }
+}
+
+export const cadastro = () => {
+    return function (dispatch, getState) {
+        dispatch(startAuthorizing());
+
+        const { email, password, nome } = getState().user;
+
+        firebase.auth().createUserWithEmailAndPassword(email, password)
+        .catch(function(error) {
+          // Handle Errors here.
+          var errorCode = error.code;
+          var errorMessage = error.message;
+          // ...
+          console.log(errorMessage);
+        });
+    }
 }
 
 const loadAssets = async() => {
@@ -170,21 +180,41 @@ export const checkUserExists = () => {
     return function (dispatch, getState) {
         dispatch(startAuthorizing());
 
+        const { email, password, nome } = getState().user;
+
         firebase.auth().onAuthStateChanged(function(user) {
           if (user) {
-            firebase.database()
-              .ref(`users/${Expo.Constants.deviceId}`)
-              //.ref(`users/teste`)
-              .once('value', (snapshot) => {
+            let userId = user.uid;
+            const ref = firebase.database().ref(`users/${userId}`);
+            console.log(`userId: ${userId}`);
+            console.log(`ref: ${ref}`);
+            ref.once('value', (snapshot) => {
                   const val = snapshot.val();
+                  console.log(`val: ${val}`);
 
                   if (val === null) {
-                      dispatch(userNoExist());
+                    console.log("val null");
+                        ref.set({
+                                  username: nome,
+                                  email: user.email
+                                }).then(() => {
+                                  console.log("DEU CERTO!");
+                                  dispatch(userAuthorized());
+                                }).catch(function(error) {
+                                  // Handle Errors here.
+                                  var errorCode = error.code;
+                                  var errorMessage = error.message;
+                                  // ...
+                                  console.log(errorMessage);
+                                });
                   }else{
+                    console.log("val not null");
                       dispatch(setEmail(val.email));
-                      startChatting(dispatch);
+                      dispatch(userAuthorized());
                   }
-              })
+              });
+          } else {
+            dispatch(userNoExist());
           }
         });
     }

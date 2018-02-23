@@ -5,6 +5,7 @@ const articles = [{
   'time': -300,
   'page': 'Perfil',
   'header': 'Perfil',
+  'desc': 'Veja seu cartão e seus dados pessoais',
   'text': 'Ferns are a very old group of plants. They first appeared on Earth in the middle Devonian Era about 360 million years ago, just before the Carboniferous Era. Most of the modern fern families we see today first appeared in the Late Cretaceous about 45 or 50 million years ago – during the age of the dinosaurs!',
   'comments': [{
     'id': 1,
@@ -43,7 +44,8 @@ const articles = [{
   'id': 2,
   'photo': require('../img/rcimg02.jpg'),
   'type': 'article',
-  'page': 'Dashboard',
+  'page': null,
+  'desc': 'Veja as informações esseniais para sua recuperação',
   'time': -1373,
   'header': 'Plano de tratamento e condulta',
   'text': 'Mostly it’s about hot air - for without that balloons are just big empty bags with baskets on the bottom. ' +
@@ -58,9 +60,10 @@ const articles = [{
   'id': 3,
   'photo': require('../img/rcimg03.jpg'),
   'type': 'article',
-  'page': 'Perfil',
+  'page': null,
   'time': -2446,
   'header': 'Orientações',
+  'desc': 'Receba orientações direta de nossos profissionais',
   'text': 'The worlds oceans cover two thirds of our planet. As we take a dive from the rocks or paddle out from the beach, we are entering a place which is teeming with marine life. ' +
   'From fish to crabs to octopuses or even sea creatures that have not yet been discovered, the oceans and its coastlines are an amazing and interesting foray of water wildlife.',
   'comments': []
@@ -68,9 +71,10 @@ const articles = [{
   'id': 4,
   'photo': require('../img/rcimg04.jpg'),
   'type': 'article',
-  'page': 'Perfil',
+  'page': null,
   'time': -3519,
   'header': 'Evolução e tratamento',
+  'desc': 'Veja como você evoluiu conosco',
   'text': 'Flowers did not always exist; they first appeared 140 million years ago. Before that, ferns and cone bearing trees dominated the earth. ' +
   'Several centuries ago in Holland, tulips were more valuable than gold. ' +
   'Broccoli is actually a flower. Some plants such as orchids do not need soil to grow-they get all of their nutrients from the air.',
@@ -79,9 +83,10 @@ const articles = [{
   'id': 5,
   'photo': require('../img/rcimg05.jpg'),
   'type': 'article',
-  'page': 'Perfil',
+  'page': null,
   'time': -4592,
   'header': 'Contato com profissionais',
+  'desc': 'Tire dúvidas e receba novas orientações',
   'text': 'Birds have feathers, wings, lay eggs and are warm blooded. There are around 10000 different species of birds worldwide. ' +
   'The Ostrich is the largest bird in the world. It also lays the largest eggs and has the fastest maximum running speed (97 kph). ' +
   'Scientists believe that birds evolved from theropod dinosaurs. Birds have hollow bones which help them fly. ' +
@@ -91,9 +96,10 @@ const articles = [{
   'id': 6,
   'photo': require('../img/rcimg06.jpg'),
   'type': 'article',
-  'page': 'Perfil',
+  'page': null,
   'time': -5665,
   'header': 'Parceiros e descontos',
+  'desc': 'Tenha descontos exclusivos em nossa rede',
   'text': 'Mountains make up about one-fifth of the world\'s landscape, and provide homes to at least one-tenth of the world\'s people. ' +
   'The tallest known mountain in the solar system is Olympus Mons, located on Mars. ' +
   'There are mountains under the surface of the sea! ' +

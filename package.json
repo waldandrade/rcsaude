@@ -35,6 +35,7 @@
     "react-native-fcm": "^11.3.0",
     "react-native-keyboard-spacer": "^0.4.1",
     "react-native-linear-gradient": "^2.4.0",
+    "react-native-popup-dialog": "^0.10.46",
     "react-native-progress-bar": "0.1.2",
     "react-native-svg": "^5.5.1",
     "react-native-switch-pro": "^0.4.7",

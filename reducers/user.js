@@ -2,6 +2,7 @@ const initialState = {
     email: null,
     password: null,
     nome: null,
+    chat_token: null,
     confirm_password: null,
     authorizing: false,
     authorized: false,
@@ -33,7 +34,8 @@ const user = (state = initialState, action) => {
         case 'USER_AUTHORIZED':
             return Object.assign({}, state, {
                 authorizing: false,
-                authorized: true
+                authorized: true,
+                new_user: null
             });
         case 'USER_OUT':
             return Object.assign({}, state, {

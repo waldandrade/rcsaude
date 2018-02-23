@@ -49,10 +49,8 @@ const LoginOrChat = connect(
           <RCSaude screenProps={{dispatch}}/>
         );
     } else if (new_user) {
-      dispatch(checkUserExists());
       return (<SignUp screenProps={{dispatch}}/>);
     } else {
-        // dispatch(loadfonts());
         dispatch(checkUserExists());
         return (<LoginV1 screenProps={{dispatch}}/>);
     }
