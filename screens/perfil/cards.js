@@ -28,7 +28,7 @@ import { Articles1 } from '../articles/articles1';
 import { updatePhoto } from '../../actions';
 import Icon from 'react-native-vector-icons/Ionicons'; // 4.4.2
 
-class Cards extends React.Component {
+class PerfilCards extends React.Component {
   static navigationOptions = {
     title: 'Perfil'.toUpperCase()
   };
@@ -275,27 +275,3 @@ let styles = RkStyleSheet.create(theme => ({
     marginVertical: 16
   }
 }));
-
-const mapStateToProps = (state) => {
-  return {
-    nome: state.nome
-  }
-}
-
-const Perfil = connect(
-  mapStateToProps
-)(({ nome }) => {
-    return (
-      <Cards screenProps={{nome}}/>
-    );
-});
-
-export class PerfilCards extends React.Component {
-  static navigationOptions = {
-    title: 'Perfil'.toUpperCase()
-  };
-
-  render() {
-    return (<Perfil />);
-  }
-}
